@@ -1,4 +1,4 @@
-# 🎁 Basketries - AI-Powered Gifting Platform
+# 🎁 Basketries - Gifting Platform
 
 Basketries is a modern web application designed to help users easily find personalized gifts. It features role-based authentication with **Admin** and **User** roles, secure signup/login with Firebase, and CRUD functionality for managing gift data (Admins only).
 
