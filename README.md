@@ -1,5 +1,4 @@
 # 🎁 Basketries - Gifting Platform
-(https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/TalhaXcodes/web-end-semester-project)
 
 Basketries is a modern web application designed to help users easily find personalized gifts. It features role-based authentication with **Admin** and **User** roles, secure signup/login with Firebase (Email/Password & Google), and CRUD functionality for managing gift and category data (Admins only). The frontend is built with React and styled with Tailwind CSS, using Redux for shopping cart state management.
 
