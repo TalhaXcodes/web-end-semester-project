@@ -103,15 +103,15 @@ While the repository might contain a default configuration, it is crucial to **r
 ## 🚀 Getting Started (Local Setup)
 
 1.  **Clone the repository:**
-    ```bash
+   
     git clone https://github.com/talhaxcodes/web-end-semester-project.git
     ```
 2.  **Navigate to the project directory:**
-    ```bash
+    
     cd web-end-semester-project
     ```
 3.  **Install dependencies:**
-    ```bash
+   
     npm install
     ```
 4.  **Set up Firebase:**
@@ -122,7 +122,6 @@ While the repository might contain a default configuration, it is crucial to **r
     -   Update the `firebaseConfig` object in `src/firebase/firebaseConfig.js` with your project's credentials.
 
 5.  **Run the application:**
-    ```bash
     npm start
     ```
     This will start the development server, typically at `http://localhost:3000`.
@@ -144,16 +143,16 @@ In the project directory, you can run:
 The project is built as a static site and can be deployed to various hosting platforms.
 
 1.  **Build the application:**
-    ```bash
+    
     npm run build
-    ```
+    
     This command creates an optimized `build` folder.
 
 2.  **Deploy:**
     -   **Firebase Hosting**: The project includes `firebase.json` and `.firebaserc` files, configured for deployment with Firebase Hosting. You can deploy using the Firebase CLI: `firebase deploy`.
     -   **Other Platforms (Vercel, Netlify, etc.)**: Connect your GitHub repository to your preferred hosting service and configure it to serve the `build` directory.
 
----
+
 
 ## 📧 Contact
 
