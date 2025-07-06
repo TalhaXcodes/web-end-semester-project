@@ -20,6 +20,7 @@ const UserNavbar = () => {
         <Link to="/about" className="text-rose-500 hover:text-rose-700 font-medium">
           About
         </Link>
+        <Link to="/questionnaire" className="text-rose-500 hover:text-rose-700 font-medium">Questionnaire</Link>
         <Link to="/services" className="text-rose-500 hover:text-rose-700 font-medium">
           Services
         </Link>
