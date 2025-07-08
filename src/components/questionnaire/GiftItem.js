@@ -39,31 +39,16 @@ const GiftItem = ({
 
 
         <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+
+            <h3 className="text-xl font-semibold text-gray-700 mb-3">
+                Gift {index + 1}
+            </h3>
+
+
+
             {/* ✅ Only show if recipient is an adult */}
             {ageType === "Adult" && (
                 <>
-                    {/* ⏳ How long have you known the recipient? */}
-                    <div className="mb-4">
-                        <label className="block text-gray-700 font-medium mb-2">
-                            How long have you known the recipient?
-                        </label>
-                        <div className="flex flex-col space-y-2">
-                            {["Less than a year", "1–3 year", "3–5 year", "5+ year"].map((option) => (
-                                <label key={option} className="flex items-center space-x-2">
-                                    <input
-                                        type="radio"
-                                        name={`duration-${recipientId}-${index}`}
-                                        checked={gift.knownDuration === option}
-                                        onChange={() =>
-                                            handleGiftSelection(recipientId, index, "knownDuration", option)
-                                        }
-                                    />
-                                    <span className="text-gray-700">{option}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-
                     {/* 🎨 Preferred style */}
                     <div className="mb-4">
                         <label className="block text-gray-700 font-medium mb-2">
@@ -94,13 +79,6 @@ const GiftItem = ({
                     </div>
                 </>
             )}
-
-            <h3 className="text-xl font-semibold text-gray-700 mb-3">
-                Gift {index + 1}
-            </h3>
-
-
-
 
 
             {/* Gift Type */}

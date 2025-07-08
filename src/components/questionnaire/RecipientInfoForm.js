@@ -3,29 +3,54 @@ import React from "react";
 const RecipientInfoForm = ({ recipient, setGiftData }) => {
   const handleChange = (field, value) => {
     setGiftData((prev) =>
-      prev.map((r) => (r.id === recipient.id ? { ...r, [field]: value } : r))
+      prev.map((r) => {
+        if (r.id !== recipient.id) return r;
+
+        const updatedRecipient = { ...r, [field]: value };
+
+        // ✅ Auto-set ageType if the relationship requires it
+        if (
+          field === "relationship" &&
+          ["Colleague/Professional", "Spouse"].includes(value)
+        ) {
+          updatedRecipient.ageType = "Adult";
+        }
+
+        return updatedRecipient;
+      })
     );
   };
+
+
 
   const handleOccasionChange = (occ, checked) => {
     setGiftData((prev) =>
       prev.map((r) =>
         r.id === recipient.id
           ? {
-              ...r,
-              occasion: checked
-                ? [...(r.occasion || []), occ]
-                : (r.occasion || []).filter((o) => o !== occ),
-            }
+            ...r,
+            occasion: checked
+              ? [...(r.occasion || []), occ]
+              : (r.occasion || []).filter((o) => o !== occ),
+          }
           : r
       )
     );
   };
 
+
+
+
   const ageOptions =
     recipient.ageType === "Kid"
       ? ["Less than a year", "1–3", "3–6", "6–9", "9–12", "12–15"]
       : ["16–20", "20–25", "25–35", "More than 35 years"];
+
+  const isAutoAdult =
+    recipient.relationship &&
+    ["Colleague/Professional", "Spouse"].includes(recipient.relationship);
+
+
 
   return (
     <div className="mb-6 space-y-4">
@@ -35,7 +60,7 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
           Occasion
         </label>
         <div className="flex flex-wrap gap-3">
-          {["Birthday", "Anniversary", "Holiday" ,"Graduation", "Wedding/Engagement gift", "Thank you gift", "Get well soon" , "Other"].map(
+          {["Birthday", "Anniversary", "Holiday", "Graduation", "Wedding/Engagement gift", "Thank you gift", "Get well soon", "Other"].map(
             (occ) => (
               <label key={occ} className="flex items-center space-x-2">
                 <input
@@ -58,7 +83,7 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
           Relationship
         </label>
         <div className="flex flex-wrap gap-4">
-          {["Close Family(Parent, Sibling, Child)","Extended Family (Aunt, Uncle, Cousin)", "Friend", "Colleague/Professional", "Spouse" , "Other"].map((rel) => (
+          {["Close Family(Parent, Sibling, Child)", "Extended Family (Aunt, Uncle, Cousin)", "Friend", "Colleague/Professional", "Spouse", "Other"].map((rel) => (
             <label key={rel} className="flex items-center space-x-2">
               <input
                 type="radio"
@@ -71,7 +96,6 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
           ))}
         </div>
       </div>
-
       {/* Gender */}
       <div>
         <label className="block text-gray-700 font-semibold mb-2">Gender</label>
@@ -90,25 +114,39 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
         </div>
       </div>
 
-      {/* Kid / Adult */}
-      <div>
-        <label className="block text-gray-700 font-semibold mb-2">
-          Is the recipient a Kid or an Adult?
-        </label>
-        <div className="flex gap-6">
-          {["Kid", "Adult"].map((type) => (
-            <label key={type} className="flex items-center space-x-2">
+
+
+      {!isAutoAdult && (
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-1">
+            Is the recipient a kid or an adult?
+          </label>
+          <div className="flex gap-4">
+            <label className="flex items-center space-x-2">
               <input
                 type="radio"
                 name={`ageType-${recipient.id}`}
-                checked={recipient.ageType === type}
-                onChange={() => handleChange("ageType", type)}
+                value="Kid"
+                checked={recipient.ageType === "Kid"}
+                onChange={(e) => handleChange("ageType", e.target.value)}
               />
-              <span className="text-gray-700">{type}</span>
+              <span className="text-gray-700">Kid</span>
             </label>
-          ))}
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name={`ageType-${recipient.id}`}
+                value="Adult"
+                checked={recipient.ageType === "Adult"}
+                onChange={(e) => handleChange("ageType", e.target.value)}
+              />
+              <span className="text-gray-700">Adult</span>
+            </label>
+          </div>
         </div>
-      </div>
+      )}
+
+
 
       {/* Age Group */}
       <div>
@@ -131,6 +169,27 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
           ))}
         </select>
       </div>
+
+      {recipient.ageType === "Adult" && (
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">
+            How long have you known the recipient?
+          </label>
+          <div className="flex flex-col space-y-2">
+            {["Less than a year", "1–3 year", "3–5 year", "5+ year"].map((option) => (
+              <label key={option} className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name={`duration-${recipient.id}`}
+                  checked={recipient.knownDuration === option}
+                  onChange={(e) => handleChange("knownDuration", e.target.value)}
+                />
+                <span className="text-gray-700">{option}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
