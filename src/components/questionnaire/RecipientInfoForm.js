@@ -8,7 +8,7 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
 
         const updatedRecipient = { ...r, [field]: value };
 
-        // ✅ Auto-set ageType if the relationship requires it
+        // Auto-set ageType if the relationship requires it
         if (
           field === "relationship" &&
           ["Colleague/Professional", "Spouse"].includes(value)
@@ -171,25 +171,31 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
       </div>
 
       {recipient.ageType === "Adult" && (
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">
-            How long have you known the recipient?
-          </label>
-          <div className="flex flex-col space-y-2">
-            {["Less than a year", "1–3 year", "3–5 year", "5+ year"].map((option) => (
-              <label key={option} className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name={`duration-${recipient.id}`}
-                  checked={recipient.knownDuration === option}
-                  onChange={(e) => handleChange("knownDuration", e.target.value)}
-                />
-                <span className="text-gray-700">{option}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
+  <div className="mb-4">
+    <label className="block text-gray-700 font-medium mb-2">
+      How long have you known the recipient?
+    </label>
+
+
+    <div className="flex flex-col space-y-2">
+      {["Less than a year", "1–3 year", "3–5 year", "5+ year"].map((option) => (
+        <label key={option} className="flex items-center space-x-2">
+          <input
+            type="radio"
+            name={`knownDuration-${recipient.id}`} // important!
+            value={option}
+            checked={recipient.knownDuration === option}
+            onChange={(e) => {
+              handleChange("knownDuration", e.target.value);
+            }}
+          />
+          <span className="text-gray-700">{option}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

@@ -19,20 +19,29 @@ const GiftItem = ({
 }) => {
 
 
+    let finalGiftOptions = [];
 
-    let finalGiftOptions = [...giftOptions];
+    // ✅ If recipient is a Kid → Only show Perfume & Edible Stuff
+    if (ageType === "Kid") {
+        finalGiftOptions = ["Perfume", "Edible Stuff"];
+    } else {
+        // ✅ If recipient is Adult → Build full list based on gender
+        finalGiftOptions = [...giftOptions];
 
-    if (gender === "Female" && ageType === "Adult") {
-        finalGiftOptions.push("Makeup Products", "Bag/Wallet");
+        if (gender === "Female") {
+            finalGiftOptions.push("Makeup Products", "Bag/Wallet");
+        }
+
+        if (gender === "Male") {
+            finalGiftOptions.push("Wallet");
+        }
     }
 
-    if (gender === "Male") {
-        finalGiftOptions.push("Wallet");
-    }
-
+    // ❗ Ensure gift.type is valid
     if (gift.type && !finalGiftOptions.includes(gift.type)) {
         handleGiftSelection(recipientId, index, "type", "");
     }
+
 
     return (
 
