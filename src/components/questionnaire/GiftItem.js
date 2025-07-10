@@ -21,31 +21,22 @@ const GiftItem = ({
 
     let finalGiftOptions = [];
 
-    // ✅ If recipient is a Kid → Only show Perfume & Edible Stuff
+    // If recipient is a Kid → Only show Perfume & Edible Stuff
     if (ageType === "Kid") {
         finalGiftOptions = ["Perfume", "Edible Stuff"];
     } else {
-        // ✅ If recipient is Adult → Build full list based on gender
+        // If recipient is Adult → Build full list based on gender
         finalGiftOptions = [...giftOptions];
-
-        if (gender === "Female") {
-            finalGiftOptions.push("Makeup Products", "Bag/Wallet");
-        }
-
-        if (gender === "Male") {
-            finalGiftOptions.push("Wallet");
-        }
     }
 
-    // ❗ Ensure gift.type is valid
+    // Ensure gift.type is valid
     if (gift.type && !finalGiftOptions.includes(gift.type)) {
         handleGiftSelection(recipientId, index, "type", "");
     }
 
+    const uniqueGiftOptions = [...new Set(finalGiftOptions)];
 
     return (
-
-
 
         <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
 
@@ -55,10 +46,10 @@ const GiftItem = ({
 
 
 
-            {/* ✅ Only show if recipient is an adult */}
+            {/* Only show if recipient is an adult */}
             {ageType === "Adult" && (
                 <>
-                    {/* 🎨 Preferred style */}
+                    {/* Preferred style */}
                     <div className="mb-4">
                         <label className="block text-gray-700 font-medium mb-2">
                             What is your preferred style for this gift?
@@ -103,7 +94,7 @@ const GiftItem = ({
                     className="w-full border border-rose-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
                 >
                     <option value="" disabled selected hidden>Select Gift Type</option>
-                    {finalGiftOptions.map((option) => (
+                    {uniqueGiftOptions.map((option) => (
                         <option key={option} value={option}>
                             {option}
                         </option>
