@@ -1,6 +1,6 @@
 import React from "react";
 
-const scaleOptions = [1, 2, 3, 4, 5];
+const emojiScale = ["😐", "🙂", "😊", "😄", "😍"];
 
 const PersonalityAnalysisForm = ({ personalityData, setPersonalityData }) => {
   const handleChange = (field, value) => {
@@ -10,93 +10,78 @@ const PersonalityAnalysisForm = ({ personalityData, setPersonalityData }) => {
     }));
   };
 
-  const renderScale = (name, labelLeft, labelRight) => (
-    <div className="mb-6">
-      <label className="block text-gray-700 font-medium mb-2">
-        {name}
-      </label>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-sm text-gray-500 w-28">{labelLeft}</span>
-        {scaleOptions.map((val) => (
-          <label key={val} className="flex flex-col items-center">
-            <input
-              type="radio"
-              name={name}
-              value={val}
-              checked={personalityData[name] === String(val)}
-              onChange={(e) => handleChange(name, e.target.value)}
-            />
-            <span className="text-sm text-gray-600">{val}</span>
-          </label>
-        ))}
-        <span className="text-sm text-gray-500 w-28 text-right">{labelRight}</span>
+  const questionLabels = {
+    personality: "How would you describe the recipient's personality?",
+    connectionImportance:
+      "How important is it for you to make the gift recipient feel special or emotionally connected through your gift?",
+    handmadePreference: "Do you enjoy incorporating handmade elements into gifts?",
+    stylePreference: "What colors or textures do you find most appealing for gift baskets?",
+    surpriseReaction: "How does the recipient react to surprises?",
+    relationshipCloseness: "How close are you to the recipient?",
+    practicalOverSentimental:
+      "How likely is the recipient to appreciate practical gifts (e.g., Hair-dryer, Hairstraightener) over sentimental ones?",
+    uniqueGiftValue: "How much does the recipient value gifts that are unique or one-of-a-kind?",
+    experiencePreference:
+      "How likely is the recipient to enjoy experience-based gifts (e.g., concert tickets, cooking classes) over physical items?",
+    budgetFlexibility:
+      "How comfortable are you with spending above your budget for a high-quality or meaningful gift?",
+    sharedMemoriesAppreciation:
+      "How much does the recipient appreciate gifts that reflect shared memories or inside jokes?",
+    noteImportance: "How much do you agree that a handwritten note adds significant value to the gift?",
+    handmadeOverStore:
+      "How likely are you to prioritize a handmade or DIY gift over a store-bought one to stay within budget?",
+  };
+
+
+  const renderSlider = (fieldName, labelLeft, labelRight) => {
+    const value = personalityData[fieldName] || "3"; // default to 3 (middle)
+
+    return (
+      <div className="mb-8">
+        <label className="block text-gray-700 font-semibold mb-3">
+          {questionLabels[fieldName] || fieldName}
+        </label>
+
+        <div className="flex items-center justify-between text-sm text-gray-500 mb-1 px-1">
+          <span>{labelLeft}</span>
+          <span>{labelRight}</span>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <span className="text-3xl w-10">{emojiScale[parseInt(value) - 1]}</span>
+
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value={value}
+            onChange={(e) => handleChange(fieldName, e.target.value)}
+            className="w-full accent-rose-500"
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-md border border-rose-300 mt-8">
       <h2 className="text-2xl font-semibold text-rose-600 mb-6 text-center">
-        Recipient Personality Analysis
+        🎭 Recipient Personality Analysis
       </h2>
 
-      {renderScale("personality", "Introvert", "Extrovert")}
-
-      {renderScale(
-        " How important is it for you to make the gift recipient feel special or emotionally connected through your gift?",
-        "Less important",
-        "Highly important"
-      )}
-
-      {renderScale("Do you enjoy incorporating handmade elements into gifts?", "Not at all", "Absolutely")}
-
-      {renderScale(" What colors or textures do you find most appealing for gift baskets?", "Neutral", "Vibrant")}
-
-      {renderScale("How does the recipient react to surprises?", "Not sure", "Loves them")}
-
-      {renderScale("How close are you to the recipient?", "Not close", "Very close")}
-
-      {renderScale(
-        " How likely is the recipient to appreciate practical gifts (e.g. Hair-dryer, Hairstraightener) over sentimental ones?",
-        "Prefers sentimental",
-        "Prefers practical"
-      )}
-
-      {renderScale(
-        "How much does the recipient value gifts that are unique or one-of-a-kind?",
-        "Prefers common gifts",
-        "Loves unique gifts"
-      )}
-
-      {renderScale(
-        " How likely is the recipient to enjoy experience-based gifts (e.g., concert tickets,cooking classes) over physical items?",
-        "Prefers physical gifts",
-        "Prefers experiences"
-      )}
-
-      {renderScale(
-        " How comfortable are you with spending above your budget for a high-quality or meaningful gift?",
-        "Not comfortable",
-        "Very comfortable"
-      )}
-
-      {renderScale(
-        " How much does the recipient appreciate gifts that reflect shared memories or inside jokes?",
-        "Not at all",
-        "Greatly appreciates"
-      )}
-
-      {renderScale(
-        " How much do you agree that a handwritten note adds significant value to the gift?",
-        "Strongly disagree",
-        "Strongly agree"
-      )}
-
-      {renderScale(
-        " How likely are you to prioritize a handmade or DIY gift over a store-bought one to stay within budget?",
-        "Unlikely",
-        "Very likely"
-      )}
+      {renderSlider("personality", "Introvert", "Extrovert")}
+      {renderSlider("connectionImportance", "Less important", "Highly important")}
+      {renderSlider("handmadePreference", "Not at all", "Absolutely")}
+      {renderSlider("stylePreference", "Neutral", "Vibrant")}
+      {renderSlider("surpriseReaction", "Not sure", "Loves them")}
+      {renderSlider("relationshipCloseness", "Not close", "Very close")}
+      {renderSlider("practicalOverSentimental", "Sentimental", "Practical")}
+      {renderSlider("uniqueGiftValue", "Common gifts", "Unique gifts")}
+      {renderSlider("experiencePreference", "Physical items", "Experiences")}
+      {renderSlider("budgetFlexibility", "Not comfortable", "Very comfortable")}
+      {renderSlider("sharedMemoriesAppreciation", "Not at all", "Greatly appreciates")}
+      {renderSlider("noteImportance", "Disagree", "Strongly agree")}
+      {renderSlider("handmadeOverStore", "Unlikely", "Very likely")}
     </div>
   );
 };

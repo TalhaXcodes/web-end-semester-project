@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const KidGiftDetails = ({
   gift,
@@ -6,9 +6,10 @@ const KidGiftDetails = ({
   index,
   handleGiftSelection,
 }) => {
-  const handleChange = (field, value) => {
+  const handleChange = useCallback((field, value) => {
     handleGiftSelection(recipientId, index, field, value);
-  };
+  }, [handleGiftSelection, recipientId, index]);
+
 
   const handleCheckboxChange = (field, option) => {
     const selected = gift[field] || [];
@@ -30,7 +31,7 @@ const KidGiftDetails = ({
     handleChange(field, updated);
   };
 
-  const [selectedCategory, setSelectedCategory] = useState(gift.category || "Toys");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     if (gift.category) {
@@ -43,25 +44,6 @@ const KidGiftDetails = ({
     "3500 – 5500 PKR",
     "5500 – 7500 PKR",
     "More than 7500 PKR",
-  ];
-
-  const toyOptions = [
-    "Building Toys (e.g. LEGO)",
-    "Dolls",
-    "Arts & Crafts",
-    "Outdoor/ Sports",
-    "Tech/ Games",
-    "Other",
-  ];
-
-  const dislikeOptions = [
-    "Noisy Toys",
-    "Messy Crafts",
-    "Animated Cartoons",
-    "Labubu Dolls",
-    "Electronic Gadgets",
-    "Stuffed Animals",
-    "Other",
   ];
 
   const priceOptions = [
@@ -83,32 +65,31 @@ const KidGiftDetails = ({
 
   const getQuantityOptions = (price) => {
     switch (price) {
+      case "1000 PKR":
       case "1000–2000 PKR":
         return [1, 2];
+
       case "2000–3000 PKR":
         return [1, 2, 3];
+
       case "3000–4000 PKR":
         return [1, 2, 3, 4];
+
       case "4000–5000 PKR":
-        return [1, 2, 3, 4, 5, 6];
-      case "More than 5000 PKR":
-        return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      case "1000 PKR":
-        return [1, 2];
-      case "1000–2000 PKR":
-        return [1, 2];
-      case "3000–4000 PKR":
-        return [1, 2, 3, 4];
-      case "4000–5000 PKR":
-        return [1, 2, 3, 4, 5];
+        return [1, 2, 3, 4, 5]; // picked the shorter one
+
       case "5000–6000 PKR":
         return [1, 2, 3, 4, 5, 6];
+
       case "6000–7000 PKR":
+      case "More than 5000 PKR":
         return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
       default:
         return [];
     }
   };
+
 
   const [isPriceSelected, setIsPriceSelected] = useState(!!gift.jewelryPrice || !!gift.ediblePrice);
 
@@ -144,41 +125,29 @@ const KidGiftDetails = ({
 
   return (
     <div className="mb-4">
-      {/* 🎯 Does the child have any strong dislikes? */}
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-1">
-          Does the child have any strong dislikes?
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {dislikeOptions.map((option) => (
-            <label key={option} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={gift.kidDislikes?.includes(option) || false}
-                onChange={() => handleCheckboxChange("kidDislikes", option)}
-              />
-              <span className="text-gray-700">{option}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       {/* 🎯 Category Selection */}
       <div className="mb-4">
+        <h3 className="text-lg font-semibold text-rose-600 mb-4">
+          Gift {index + 1}
+        </h3>
         <label className="block text-gray-700 font-medium mb-1">
-          Select Gift Type
+          Gift Type
         </label>
         <select
-          value={selectedCategory}
+          value={selectedCategory || ""}
           onChange={(e) => handleChange("category", e.target.value)}
           className="w-full border border-rose-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
         >
+          <option value="" disabled hidden>
+            Select Gift Type
+          </option>
           <option value="Toys">Toys</option>
           <option value="Accessories">Accessories</option>
           <option value="Perfume">Perfume</option>
           <option value="Edible Stuff">Edible Stuff</option>
         </select>
       </div>
+
 
       {/* 🧸 Toys Category */}
       {selectedCategory === "Toys" && (
@@ -201,35 +170,6 @@ const KidGiftDetails = ({
                 </label>
               ))}
             </div>
-          </div>
-
-          {/* 🧸 Toy or Activity */}
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-1">
-              Does the child have a favorite type of toy or activity?
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {toyOptions.map((option) => (
-                <label key={option} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={gift.kidToyTypes?.includes(option) || false}
-                    onChange={() => handleCheckboxChange("kidToyTypes", option)}
-                  />
-                  <span className="text-gray-700">{option}</span>
-                </label>
-              ))}
-            </div>
-
-            {gift.kidToyTypes?.includes("Other") && (
-              <input
-                type="text"
-                value={gift.kidToyOther || ""}
-                onChange={(e) => handleChange("kidToyOther", e.target.value)}
-                placeholder="Please specify"
-                className="mt-3 w-full border border-rose-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
-              />
-            )}
           </div>
         </>
       )}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import MakeupGiftDetails from "./giftType/MakeupGiftDetails";
 import WalletGiftDetails from "./giftType/WalletGiftDetails";
 import JewelleryGiftDetails from "./giftType/JewelleryGiftDetails";
@@ -35,21 +35,16 @@ const GiftItem = ({
   const uniqueGiftOptions = [...new Set(finalGiftOptions)];
 
   // State to track special instructions per recipient
-  const [specialInstructions, setSpecialInstructions] = useState(gift.specialInstructions || "");
+  // const [specialInstructions, setSpecialInstructions] = useState(gift.specialInstructions || "");
 
-  const handleSpecialInstructionsChange = (e) => {
-    const value = e.target.value;
-    setSpecialInstructions(value);
-    handleGiftSelection(recipientId, index, "specialInstructions", value);
-  };
+  // const handleSpecialInstructionsChange = (e) => {
+  //   const value = e.target.value;
+  //   setSpecialInstructions(value);
+  //   handleGiftSelection(recipientId, index, "specialInstructions", value);
+  // };
 
   return (
     <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
-      <h3 className="text-xl font-semibold text-gray-700 mb-3">
-        For all the gifts of recipient #{recipientId}
-      </h3>
-
-     
 
 
       {/* Only show if recipient is an adult */}
@@ -57,9 +52,15 @@ const GiftItem = ({
         <>
           {/* Preferred style */}
           <div className="mb-4">
+            <h3 className="text-lg font-semibold text-rose-600 mb-4">
+              Gift {index + 1}
+            </h3>
             <label className="block text-gray-700 font-medium mb-2">
-              What is your preferred style for this gift?
+              What packaging style would you prefer for this gift?
             </label>
+            <p className="text-sm text-gray-500 mb-6">
+              (This helps us wrap the gift in a way that matches your recipient's personality and your preferences.)
+            </p>
             <div className="flex flex-wrap gap-4">
               {[
                 "Handmade & Crafted",
@@ -96,7 +97,7 @@ const GiftItem = ({
               }
               className="w-full border border-rose-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
             >
-              <option value="" disabled selected hidden>Select Gift Type</option>
+              <option value="" disabled hidden>Select Gift Type</option>
               {uniqueGiftOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}

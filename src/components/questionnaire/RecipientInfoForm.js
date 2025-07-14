@@ -50,6 +50,25 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
     recipient.relationship &&
     ["Colleague/Professional", "Spouse"].includes(recipient.relationship);
 
+  const toyOptions = [
+    "Building Toys (e.g. LEGO)",
+    "Dolls",
+    "Arts & Crafts",
+    "Outdoor/ Sports",
+    "Tech/ Games",
+    "Other",
+  ];
+
+  const dislikeOptions = [
+    "Noisy Toys",
+    "Messy Crafts",
+    "Animated Cartoons",
+    "Labubu Dolls",
+    "Electronic Gadgets",
+    "Stuffed Animals",
+    "Other",
+  ];
+
 
 
   return (
@@ -170,31 +189,98 @@ const RecipientInfoForm = ({ recipient, setGiftData }) => {
         </select>
       </div>
 
+      {/* 👶 Kid-specific Questions */}
+      {recipient.ageType === "Kid" && (
+        <>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-1">
+              Does the child have any strong dislikes?
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {dislikeOptions.map((option) => (
+                <label key={option} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={recipient.kidDislikes?.includes(option) || false}
+                    onChange={() =>
+                      setGiftData((prev) =>
+                        prev.map((r) =>
+                          r.id === recipient.id
+                            ? {
+                              ...r,
+                              kidDislikes: r.kidDislikes?.includes(option)
+                                ? r.kidDislikes.filter((d) => d !== option)
+                                : [...(r.kidDislikes || []), option],
+                            }
+                            : r
+                        )
+                      )
+                    }
+                  />
+                  <span className="text-gray-700">{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-1">
+              Does the child have a favorite type of toy or activity?
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {toyOptions.map((option) => (
+                <label key={option} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={recipient.kidToyTypes?.includes(option) || false}
+                    onChange={() =>
+                      setGiftData((prev) =>
+                        prev.map((r) =>
+                          r.id === recipient.id
+                            ? {
+                              ...r,
+                              kidToyTypes: r.kidToyTypes?.includes(option)
+                                ? r.kidToyTypes.filter((t) => t !== option)
+                                : [...(r.kidToyTypes || []), option],
+                            }
+                            : r
+                        )
+                      )
+                    }
+                  />
+                  <span className="text-gray-700">{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
       {recipient.ageType === "Adult" && (
-  <div className="mb-4">
-    <label className="block text-gray-700 font-medium mb-2">
-      How long have you known the recipient?
-    </label>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">
+            How long have you known the recipient?
+          </label>
 
 
-    <div className="flex flex-col space-y-2">
-      {["Less than a year", "1–3 year", "3–5 year", "5+ year"].map((option) => (
-        <label key={option} className="flex items-center space-x-2">
-          <input
-            type="radio"
-            name={`knownDuration-${recipient.id}`} // important!
-            value={option}
-            checked={recipient.knownDuration === option}
-            onChange={(e) => {
-              handleChange("knownDuration", e.target.value);
-            }}
-          />
-          <span className="text-gray-700">{option}</span>
-        </label>
-      ))}
-    </div>
-  </div>
-)}
+          <div className="flex flex-col space-y-2">
+            {["Less than a year", "1–3 year", "3–5 year", "5+ year"].map((option) => (
+              <label key={option} className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name={`knownDuration-${recipient.id}`} // important!
+                  value={option}
+                  checked={recipient.knownDuration === option}
+                  onChange={(e) => {
+                    handleChange("knownDuration", e.target.value);
+                  }}
+                />
+                <span className="text-gray-700">{option}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
     </div>
   );
