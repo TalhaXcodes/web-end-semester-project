@@ -46,138 +46,132 @@ const GiftItem = ({
   return (
     <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
 
+      <h3 className="text-lg font-semibold text-rose-600 mb-4">
+        Gift {index + 1}
+      </h3>
 
-      {/* Only show if recipient is an adult */}
+
+      {/* 🎀 Adult-only packaging style */}
       {ageType === "Adult" && (
-        <>
-          {/* Preferred style */}
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-rose-600 mb-4">
-              Gift {index + 1}
-            </h3>
-            <label className="block text-gray-700 font-medium mb-2">
-              What packaging style would you prefer for this gift?
-            </label>
-            <p className="text-sm text-gray-500 mb-6">
-              (This helps us wrap the gift in a way that matches your recipient's personality and your preferences.)
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {[
-                "Handmade & Crafted",
-                "Quirky & Unique",
-                "Funny & Lighthearted",
-              ].map((style) => (
-                <label key={style} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={gift.preferredStyle?.includes(style) || false}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      handleGiftSelection(recipientId, index, "preferredStyle", [
-                        ...(gift.preferredStyle || []).filter((s) => s !== style),
-                        ...(checked ? [style] : []),
-                      ]);
-                    }}
-                  />
-                  <span className="text-gray-700">{style}</span>
-                </label>
-              ))}
-            </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">
+            What packaging style would you prefer for this gift?
+          </label>
+          <p className="text-sm text-gray-500 mb-6">
+            (This helps us wrap the gift in a way that matches your recipient's personality and your preferences.)
+          </p>
+          <div className="flex flex-wrap gap-4">
+            {["Handmade & Crafted", "Quirky & Unique", "Funny & Lighthearted"].map((style) => (
+              <label key={style} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={gift.preferredStyle?.includes(style) || false}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    handleGiftSelection(recipientId, index, "preferredStyle", [
+                      ...(gift.preferredStyle || []).filter((s) => s !== style),
+                      ...(checked ? [style] : []),
+                    ]);
+                  }}
+                />
+                <span className="text-gray-700">{style}</span>
+              </label>
+            ))}
           </div>
+        </div>
+      )}
 
-          {/* Gift Type */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2 font-medium">
-              Gift Type
-            </label>
-            <select
-              value={gift.type || ""}
-              onChange={(e) =>
-                handleGiftSelection(recipientId, index, "type", e.target.value)
-              }
-              className="w-full border border-rose-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
-            >
-              <option value="" disabled hidden>Select Gift Type</option>
-              {uniqueGiftOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
+      {/* 🎁 Common Dropdown - both for Kids and Adults */}
+      <div className="mb-4">
+        <label className="block text-gray-700 mb-2 font-medium">Gift Type</label>
+        <select
+          value={gift.type || ""}
+          onChange={(e) =>
+            handleGiftSelection(recipientId, index, "type", e.target.value)
+          }
+          className="w-full border border-rose-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
+        >
+          <option value="" disabled hidden>Select Gift Type</option>
+          {uniqueGiftOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          {gift.type === "Makeup Products" &&
-            gender === "Female" &&
-            ageType === "Adult" && (
-              <MakeupGiftDetails
-                gift={gift}
-                recipientId={recipientId}
-                index={index}
-                handleGiftSelection={handleGiftSelection}
-              />
-            )}
 
-          {(gift.type === "Bag/Wallet" || gift.type === "Wallet") && (
-            <WalletGiftDetails
-              gift={gift}
-              recipientId={recipientId}
-              index={index}
-              handleGiftSelection={handleGiftSelection}
-              gender={gender}
-            />
-          )}
+      {/* 🧩 Dynamic Gift Detail Components */}
+      {gift.type === "Makeup Products" && gender === "Female" && ageType === "Adult" && (
+        <MakeupGiftDetails
+          gift={gift}
+          recipientId={recipientId}
+          index={index}
+          handleGiftSelection={handleGiftSelection}
+        />
+      )}
 
-          {gift.type === "Jewellery" && (
-            <JewelleryGiftDetails
-              gift={gift}
-              recipientId={recipientId}
-              index={index}
-              handleGiftSelection={handleGiftSelection}
-              gender={gender}
-              ageType={ageType}
-            />
-          )}
+      {(gift.type === "Bag/Wallet" || gift.type === "Wallet") && (
+        <WalletGiftDetails
+          gift={gift}
+          recipientId={recipientId}
+          index={index}
+          handleGiftSelection={handleGiftSelection}
+          gender={gender}
+        />
+      )}
 
-          {gift.type === "Perfume" && (
-            <PerfumeGiftDetails
-              gift={gift}
-              recipientId={recipientId}
-              index={index}
-              handleGiftSelection={handleGiftSelection}
-            />
-          )}
+      {(gift.type === "Jewellery" || gift.type === "Accessories") && (
+        <JewelleryGiftDetails
+          gift={gift}
+          recipientId={recipientId}
+          index={index}
+          handleGiftSelection={handleGiftSelection}
+          gender={gender}
+          ageType={ageType}
+        />
+      )}
 
-          {gift.type === "Edible Stuff" && (
-            <EdibleGiftDetails
-              gift={gift}
-              recipientId={recipientId}
-              index={index}
-              handleGiftSelection={handleGiftSelection}
-            />
-          )}
 
-          {gift.type === "Shoes" && (
-            <ShoeGiftDetails
-              gift={gift}
-              recipientId={recipientId}
-              index={index}
-              handleGiftSelection={handleGiftSelection}
-              gender={gender}
-              ageType={ageType}
-            />
-          )}
+      {gift.type === "Perfume" && (
+        <PerfumeGiftDetails
+          gift={gift}
+          recipientId={recipientId}
+          index={index}
+          handleGiftSelection={handleGiftSelection}
+          ageType={ageType}
+        />
+      )}
 
-          {gift.type === "Clothing" && (
-            <ClothingGiftDetails
-              gift={gift}
-              recipientId={recipientId}
-              index={index}
-              handleGiftSelection={handleGiftSelection}
-              gender={gender}
-              ageType={ageType}
-            />
-          )}
-        </>
+      {gift.type === "Edible Stuff" && (
+        <EdibleGiftDetails
+          gift={gift}
+          recipientId={recipientId}
+          index={index}
+          handleGiftSelection={handleGiftSelection}
+        />
+      )}
+
+      {gift.type === "Shoes" && (
+        <ShoeGiftDetails
+          gift={gift}
+          recipientId={recipientId}
+          index={index}
+          handleGiftSelection={handleGiftSelection}
+          gender={gender}
+          ageType={ageType}
+        />
+      )}
+
+      {gift.type === "Clothing" && (
+        <ClothingGiftDetails
+          gift={gift}
+          recipientId={recipientId}
+          index={index}
+          handleGiftSelection={handleGiftSelection}
+          gender={gender}
+          ageType={ageType}
+        />
       )}
 
       {/* Show KidGiftDetails for kids */}
@@ -187,6 +181,7 @@ const GiftItem = ({
           recipientId={recipientId}
           index={index}
           handleGiftSelection={handleGiftSelection}
+          ageType={ageType}
         />
       )}
     </div>
